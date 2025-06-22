@@ -1,13 +1,8 @@
 const db = require('../config/db');
 
-// =================================================================
-// Fungsi untuk Membuat Tugas Baru
-// =================================================================
 exports.createTask = async (req, res) => {
-  // Ambil semua data yang dibutuhkan dari body
   const { title, description, due_date, project_id, user_id } = req.body;
 
-  // Validasi
   if (!title || !project_id || !user_id) {
     return res.status(400).json({ message: 'Title, project_id, dan user_id wajib diisi.' });
   }
@@ -24,8 +19,6 @@ exports.createTask = async (req, res) => {
 };
 
 exports.getAllTasks = async (req, res) => {
-    // Bonus: kita buat agar bisa filter berdasarkan project_id jika ada di query URL
-    // Contoh: /api/tasks?projectId=1
     const { projectId } = req.query;
     try {
         let query;
@@ -55,7 +48,6 @@ exports.getTaskById = async (req, res) => {
 
 exports.updateTask = async (req, res) => {
     const { id } = req.params;
-    // Status adalah field yang paling sering di-update
     const { title, description, status, due_date, user_id } = req.body;
     try {
         const queryText = `UPDATE tasks 

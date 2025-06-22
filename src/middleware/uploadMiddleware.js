@@ -1,20 +1,17 @@
 const multer = require('multer');
 const path = require('path');
 
-// Tentukan lokasi penyimpanan file
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    // 'uploads/' adalah folder tempat file akan disimpan
     cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
-    // Buat nama file yang unik untuk menghindari konflik nama
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
   }
 });
 
-// Filter untuk hanya menerima file gambar
+
 const fileFilter = (req, file, cb) => {
   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
     cb(null, true);
@@ -26,7 +23,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 1024 * 1024 * 5 // Batas ukuran file 5MB
+    fileSize: 1024 * 1024 * 5 
   },
   fileFilter: fileFilter
 });

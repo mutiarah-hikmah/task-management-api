@@ -1,10 +1,6 @@
 const db = require('../config/db');
 
-// =================================================================
-// Fungsi untuk Membuat Proyek Baru
-// =================================================================
 exports.createProject = async (req, res) => {
-  // Ambil data dari body request
   const { name, description } = req.body;
 
   if (!name) {
@@ -22,9 +18,6 @@ exports.createProject = async (req, res) => {
   }
 };
 
-// =================================================================
-// Fungsi untuk Mendapatkan SEMUA Proyek
-// =================================================================
 exports.getAllProjects = async (req, res) => {
   try {
     const projects = await db.query('SELECT * FROM projects ORDER BY created_at DESC');
@@ -35,9 +28,6 @@ exports.getAllProjects = async (req, res) => {
   }
 };
 
-// =================================================================
-// Fungsi untuk Mendapatkan Proyek Berdasarkan ID
-// =================================================================
 exports.getProjectById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -53,9 +43,6 @@ exports.getProjectById = async (req, res) => {
   }
 };
 
-// =================================================================
-// Fungsi untuk Mengupdate Proyek
-// =================================================================
 exports.updateProject = async (req, res) => {
     const { id } = req.params;
     const { name, description } = req.body;
@@ -64,8 +51,6 @@ exports.updateProject = async (req, res) => {
         return res.status(400).json({ message: 'Setidaknya satu field (name atau description) harus diisi.' });
     }
 
-    // Untuk sementara, kita buat update sederhana.
-    // Kamu bisa kembangkan jadi dinamis seperti update user jika mau.
     try {
         const queryText = 'UPDATE projects SET name = $1, description = $2 WHERE id = $3 RETURNING *';
         const updatedProject = await db.query(queryText, [name, description, id]);
@@ -80,16 +65,12 @@ exports.updateProject = async (req, res) => {
     }
 };
 
-// =================================================================
-// Fungsi untuk Menghapus Proyek
-// =================================================================
 exports.deleteProject = async (req, res) => {
     try {
         const { id } = req.params;
         await db.query('DELETE FROM projects WHERE id = $1', [id]);
         res.status(200).json({ message: 'Proyek berhasil dihapus.' });
     } catch (error) {
-        // Ingat, jika ada tugas yang terhubung ke proyek ini, mereka akan ikut terhapus (ON DELETE CASCADE)
         console.error('Error saat menghapus proyek:', error);
         res.status(500).json({ message: 'Terjadi kesalahan pada server' });
     }

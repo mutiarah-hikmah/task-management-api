@@ -9,7 +9,6 @@ const pool = new Pool({
   port: process.env.DB_PORT,
 });
 
-// Fungsi untuk mengetes koneksi saat server pertama kali berjalan
 pool.connect((err) => {
     if (err) {
         console.error('Koneksi ke database GAGAL:', err.stack);
